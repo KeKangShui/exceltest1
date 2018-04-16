@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.excel.core.dao.UserDao">
+    <resultMap id="user" type="com.excel.core.bean.User">
+        <result property="id" column="id"/>
+        <result property="user_name" column="username"/>
+        <result property="sex" column="sex"/>
+    </resultMap>
+    <insert id="addUser" parameterType="com.excel.core.bean.User" useGeneratedKeys="true">
+    INSERT INTO user(id, username, sex)VALUES (#{id}, #{user_name}, #{sex})
+    </insert>
+</mapper>

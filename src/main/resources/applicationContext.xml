@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+         http://www.springframework.org/schema/context
+         http://www.springframework.org/schema/context/spring-context-3.0.xsd
+         http://www.springframework.org/schema/beans
+         http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+         http://www.springframework.org/schema/jdbc
+         http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+         http://www.springframework.org/schema/tx
+         http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+         http://www.springframework.org/schema/aop
+         http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+    <!-- 1，扫描注解包-->
+    <!-- spring 扫包 @Service -->
+    <context:component-scan base-package="com.excel.core">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <!--2,配置数据源-->
+    <!-- 读取jdbc配置 -->
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations" value="classpath:properties/jdbc.properties"/>
+    </bean>
+
+    <context:property-placeholder location="classpath:properties/jdbc.properties"/>
+
+    <!-- c3p0 数据源配置，这个比阿帕奇的dbcp子项目要好，因为他1：可以连多个数据库；2：可以自动重连-->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="com.mysql.jdbc.Driver"/>
+        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/excel?characterEncoding=UTF-8"/>
+        <property name="user" value="root" />
+        <property name="password" value="123456"/>
+    </bean>
+    <!--3, mybatis 配置-->
+
+    <!--spring和mybatis完美结合，不需要mybatis配置映射文件-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+    <property name="dataSource" ref="dataSource" />
+        <property name="mapperLocations" value="classpath*:mapper/UserDao.xml"/>
+        <!--这个query 一定研究一下  用处好大啊！！-->
+        <!--<property name="typeAliasesPackage" value="cn.biye.core.bean,cn.biye.core.query"/>-->
+    </bean>
+
+    <!--4, 扫包 -->
+    <!-- DAO接口所在包名，Spring会自动查找其下的类 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!--下面这个value可以有两种写法：1，精确到各个包下面，多个包用逗号隔开。
+            2，不精确到每个包下面，就只写到各个包上面的包中，例如dao包下面还有包，则写到dao就行了-->
+        <property name="basePackage" value="com.excel.core.dao"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </bean>
+
+    <!-- spring 事务 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!--  文件上传 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="1073741824"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
+
+
+    <!-- 开启事务注解 -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <!-- 文件上传表单的视图解析器 -->
+
+</beans>
