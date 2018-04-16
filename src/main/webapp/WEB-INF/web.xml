@@ -7,6 +7,11 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
 <display-name>Archetype Created Web Application</display-name>
+    
+    <welcome-file-list>
+        <welcome-file>/upload.jsp</welcome-file>
+    </welcome-file-list>
+    
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>classpath:applicationContext.xml</param-value>

@@ -11,6 +11,7 @@
     <title>Title</title>
 </head>
 <body>
-
+<%=request.getAttribute("list")%>
+${requestScope.list}
 </body>
 </html>

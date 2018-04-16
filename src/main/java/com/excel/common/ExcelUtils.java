@@ -70,6 +70,7 @@ public class ExcelUtils {
                     String[] cells = new String[firstColumn];
                     //循环当前行
                     for (int cellNum = firstCellNum; cellNum < firstColumn; cellNum++) {
+                        //一个一个地取得单元格
                         Cell cell = row.getCell(cellNum);
                         cells[cellNum] = getCellValue(cell);
                     }
