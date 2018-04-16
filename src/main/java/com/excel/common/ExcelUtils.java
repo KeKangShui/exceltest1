@@ -62,13 +62,13 @@ public class ExcelUtils {
                     }
                     int firstCellNum = 0;
 
-//获得当前行的列数
+                    //获得当前行的列数
                     int lastCellNum = row.getPhysicalNumberOfCells();
                     if (rowNum == firstRowNum) {
                         firstColumn = lastCellNum;
                     }
                     String[] cells = new String[firstColumn];
-//循环当前行
+                    //循环当前行
                     for (int cellNum = firstCellNum; cellNum < firstColumn; cellNum++) {
                         Cell cell = row.getCell(cellNum);
                         cells[cellNum] = getCellValue(cell);

@@ -52,7 +52,7 @@ public class TestController {
 
     @RequestMapping(value = "/upload.do", method = RequestMethod.POST)
     @ResponseBody
-    public String testExcel(@RequestParam MultipartFile file, HttpServletResponse response)throws IOException{
+    public String testExcel(@RequestParam MultipartFile file, HttpServletResponse response,ModelMap modelMap)throws IOException{
         response.setCharacterEncoding("UTF-8");
         List<String[]> res = ExcelUtils.readExcel(file);
         System.out.println("测试已经进入该方法");
@@ -67,7 +67,17 @@ public class TestController {
             System.out.println("-------------------");
             System.out.println(jsonArray);
         }
-        return json;
+        for (int i = 0; i < res.size(); i++) {
+            System.out.println(res);
+
+        }
+
+
+        //这种只是将数据直接返回到网页前端
+//        return json;
+//        modelMap.addAttribute("",);
+        return "show";
     }
+
 
 }
