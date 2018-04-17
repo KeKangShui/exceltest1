@@ -81,8 +81,10 @@ public class TestController {
             }
         }
 //        modelMap.addAttribute("str",list);
-        request.setAttribute("list", str);
-//        request.getRequestDispatcher("/WEB-INF/page/show.jsp").forward(request,response);
+//        request.setAttribute("list", str);
+        request.setAttribute("res",res);
+        request.getRequestDispatcher("/WEB-INF/page/show.jsp").forward(request,response);
+
         return buffer;
         //这种只是将数据直接返回到网页前端
 //        return json;

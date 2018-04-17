@@ -5,11 +5,11 @@ package com.excel.common;
  */
 
 import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -54,7 +54,7 @@ public class ExcelUtils {
                 int lastRowNum = sheet.getLastRowNum();
                 //循环除了第一行的所有行
                 int firstColumn = 0;
-                for (int rowNum = firstRowNum; rowNum < lastRowNum; rowNum++) {
+                for (int rowNum = firstRowNum; rowNum < lastRowNum; rowNum++){
                     //获得当前行
                     Row row = sheet.getRow(rowNum);
                     if (row == null) {
@@ -73,6 +73,7 @@ public class ExcelUtils {
                         //一个一个地取得单元格
                         Cell cell = row.getCell(cellNum);
                         cells[cellNum] = getCellValue(cell);
+
                     }
                     list.add(cells);
                 }
@@ -80,6 +81,73 @@ public class ExcelUtils {
             workbook.close();
         }
         return list;
+    }
+
+
+    public static String responseExcel(@RequestParam MultipartFile file)throws
+    IOException{
+        StringBuffer buffer =new StringBuffer();
+        String table = "<table><tr>";
+        String tb =null;
+
+        //检查文件
+        checkFile(file);
+        //获得工作簿对象
+        Workbook workbook = getWorkBook(file);
+
+        if (workbook != null) {
+            for (int sheetNum = 0; sheetNum < workbook.getNumberOfSheets(); sheetNum++) {
+                //获得当前sheet工作表
+                HSSFSheet sheet = (HSSFSheet) workbook.getSheetAt(sheetNum);
+                if (sheet == null) {
+                    continue;
+                }
+                //获得当前sheet的开始行
+                int firstRowNum = sheet.getFirstRowNum();
+                //获得当前sheet结束行
+                int lastRowNum = sheet.getLastRowNum();
+                //循环除了第一行的所有行
+                int firstColumn = 0;
+                for (int rowNum = firstRowNum; rowNum < lastRowNum; rowNum++) {
+                    //获得当前行
+                    Row row = sheet.getRow(rowNum);
+                    if (row == null) {
+                        continue;
+                    }
+                    int firstCellNum = 0;
+                    //获取当前行的列数
+                    int lastCellNum = row.getPhysicalNumberOfCells();
+                    if (rowNum == lastRowNum){
+                        firstColumn = lastCellNum;
+                    }
+                    CellStyle cellStyle =workbook.createCellStyle();
+                    sheet.addMergedRegion(new CellRangeAddress(firstRowNum,lastRowNum,firstColumn,lastCellNum));
+                    //循环当前行
+                    for (int cellnum = firstCellNum; cellnum <firstColumn ; cellnum++) {
+                        tb = row.getCell(cellnum).getStringCellValue().toString();
+
+                        if (tb !="" && tb!=null){
+                            //是否有换行符
+                            if (row.getRowStyle().getWrapText()){
+                                buffer.append("<td colspan="+(lastCellNum-firstColumn+1)+"rowspan="+(lastRowNum-firstRowNum+1)+">"+tb+"</td>");
+                            }else {
+                                buffer.append("<td>"+tb+"</td>");
+                            }
+                        }else {
+                            if (row.getRowStyle().getWrapText()){
+                                buffer.append("<td colspan=></td>");
+                            }else {
+                                continue;
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            workbook.close();
+        }
+        return buffer.toString();
     }
 
     public static void checkFile(@RequestParam MultipartFile file) throws IOException {
