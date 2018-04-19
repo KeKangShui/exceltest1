@@ -1,18 +1,27 @@
-<%@ page import="java.util.List" %><%--
-  Created by IntelliJ IDEA.
-  User: Administrator
-  Date: 2018/4/16 0016
-  Time: 下午 17:56
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" import="com.excel.common.ExcelUtils" language="java" %>
 <html>
 <head>
     <title>Title</title>
+
+    <style>
+        table{
+            width: 55%;
+            margin: 0px auto;
+            margin-top: 40px;
+        }
+        td{
+            width: 60px;
+            height: 40px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-<%!StringBuffer buffer = new StringBuffer(); %>
-<%List<String[]> str = (List<String[]>)request.getAttribute("res");
+<%--<%=request.getAttribute("test")%>  这个也是可以使用  --%>
+<%--<%!StringBuffer buffer = new StringBuffer(); %>
+<%
+    List<String[]> str = (List<String[]>)request.getAttribute("res");
         buffer.delete(0,buffer.length());
 for (int i = 0; i < str.size(); i++) {
         String[] strings =str.get(i);
@@ -21,15 +30,20 @@ for (int i = 0; i < str.size(); i++) {
             System.out.println(strings[j]);
             buffer.append("<table><th>");
             if (null != s){
-                buffer.append("<tr><td>"+strings[j]+"</td></tr>");
+                buffer.append("<tr><td >"+s+"</td></tr>");
             }
-            buffer.append("</table></th>");
+            buffer.append("</th></table>");
         }
     }
-%>
-${buffer}
-<%=buffer.toString()%>
+%>--%>
+<%--<%=request.getAttribute("test")%>--%>
 
-
+<%--${pageContext.request.contextPath}
+<%--
+<c:forEach var="tx" items="${test}">
+    ${tx}
+</c:forEach>--%>
+${requestScope.test}
+<%--${test}  这个也是可以使用--%>
 </body>
 </html>

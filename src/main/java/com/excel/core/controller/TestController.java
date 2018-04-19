@@ -1,7 +1,10 @@
 package com.excel.core.controller;
 
 import com.excel.common.ExcelUtils;
+import com.excel.core.bean.Excel;
+import com.excel.core.bean.Json;
 import com.excel.core.bean.User;
+import com.excel.core.service.ExcelService;
 import com.excel.core.service.UserService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -19,7 +22,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by ASUS on 2018/4/15.
@@ -28,6 +33,9 @@ import java.util.List;
 public class TestController {
     @Autowired
     private UserService service;
+    @Autowired
+    private ExcelService jsonService;
+
    /* @RequestMapping(value = "/")
     @ResponseBody
     public String index(){
@@ -45,6 +53,7 @@ public class TestController {
         map.addAttribute("sex", user.getSex());
         service.addUser(user);
         JSONObject ob = JSONObject.fromObject(user);
+
 //        service.addUser(ob);
         System.out.println(ob);
         return "test";
@@ -52,10 +61,27 @@ public class TestController {
 
     @RequestMapping(value = "/upload.do", method = RequestMethod.POST)
     @ResponseBody
-    public StringBuffer testExcel(@RequestParam MultipartFile file, HttpServletResponse response, HttpServletRequest request
-    ,ModelMap modelMap) throws IOException, ServletException {
+    public StringBuffer testExcel(Excel excel, @RequestParam MultipartFile file, HttpServletResponse response, HttpServletRequest request
+    , ModelMap modelMap) throws IOException, ServletException {
         response.setCharacterEncoding("UTF-8");
         List<String[]> res = ExcelUtils.readExcel(file);
+
+  /*      Json[] jsons =new Json[res.size()];
+        for (int i = 0; i < res.size(); i++) {
+            String [] strings =res.get(i);
+            for (int j = 0; j < strings.length; j++) {
+//                jsonService.addJson(bean);
+                jsons[j].setJson((strings[j]));
+
+                System.out.println(excel.getJson(jsons[j]));
+            }
+        }
+        JSONArray ob =JSONArray.fromObject(excel);
+        System.out.println(ob);
+//        excel.getJson(Json[i])
+        modelMap.addAttribute("json",ob);//
+*/
+
         System.out.println("测试已经进入该方法");
         String json = null;
         String[] array = null;
@@ -80,6 +106,15 @@ public class TestController {
                 buffer.append(str[i]);
             }
         }
+
+        Map<String,Object> map =new HashMap<String, Object>();
+        String test ="hello world";
+        map.put("file",file);
+//        map.put("res",res);
+        modelMap.addAttribute("test",test);
+        modelMap.addAttribute("map",map);
+
+
 //        modelMap.addAttribute("str",list);
 //        request.setAttribute("list", str);
         request.setAttribute("res",res);
@@ -91,5 +126,35 @@ public class TestController {
 
     }
 
+
+
+
+
+
+    @RequestMapping(value = "/mytest.do",method = RequestMethod.POST)
+    public String test(HttpServletRequest request,HttpServletResponse response,@RequestParam MultipartFile file,ModelMap modelMap) throws ServletException, IOException {
+
+        System.out.println("您已进入该方法！！！");
+        String filename = file.getOriginalFilename().toString();
+        System.out.println(filename);
+  /*      Map<String,String> map = new HashMap<String, String>();
+        map.put("A","what");
+        map.put("B","the");
+        map.put("C","fuck");
+        modelMap.addAttribute("filename",filename);
+        modelMap.addAttribute("map",map);
+        request.getRequestDispatcher("WEB-INF/page/pic.jsp").forward(request,response);
+  */
+        String stest = ExcelUtils.responseExcel(file);
+//        System.out.println(stest);
+//        modelMap.addAttribute("test",stest);
+        request.setAttribute("test",stest);
+
+        //在这里转换为json格式存到数据库
+        jsonService.addJson(stest);
+
+//        request.getRequestDispatcher("WEB-INF/page/show.jsp").forward(request,response);
+        return "show";
+    }
 
 }

@@ -14,7 +14,7 @@ public interface UserService {
      * @param user
      * @return
      */
-    Integer addUser (User user);
+    Integer addUser(User user);
 
     /**
      * 根据主键查找

@@ -34,7 +34,7 @@
     <!-- c3p0 数据源配置，这个比阿帕奇的dbcp子项目要好，因为他1：可以连多个数据库；2：可以自动重连-->
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
         <property name="driverClass" value="com.mysql.jdbc.Driver"/>
-        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/excel?characterEncoding=UTF-8"/>
+        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/user?characterEncoding=UTF-8"/>
         <property name="user" value="root" />
         <property name="password" value="123456"/>
     </bean>
@@ -43,7 +43,7 @@
     <!--spring和mybatis完美结合，不需要mybatis配置映射文件-->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
     <property name="dataSource" ref="dataSource" />
-        <property name="mapperLocations" value="classpath*:mapper/UserDao.xml"/>
+        <property name="mapperLocations" value="classpath*:mapper/*.xml"/>
         <!--这个query 一定研究一下  用处好大啊！！-->
         <!--<property name="typeAliasesPackage" value="cn.biye.core.bean,cn.biye.core.query"/>-->
     </bean>

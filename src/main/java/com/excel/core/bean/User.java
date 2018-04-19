@@ -8,6 +8,10 @@ public class User {
     private String user_name;
     private String sex;
 
+//    public User(String user_name){
+//        this.user_name =user_name;
+//    }
+
     public int getId() {
         return id;
     }
@@ -19,8 +23,9 @@ public class User {
         return user_name;
     }
 
-    public void setUser_name(String user_name) {
+    public User setUser_name(String user_name) {
         this.user_name = user_name;
+        return null;
     }
 
     public String getSex() {
