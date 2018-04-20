@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.excel.core.dao.ExcelDao">
+    <resultMap id="excel" type="com.excel.core.bean.Excel">
+        <result property="id" column="id" javaType="int" jdbcType="INTEGER"/>
+        <result property="json" column="json" javaType="string" jdbcType="VARCHAR"/>
+    </resultMap>
+    <insert id="addJson" parameterType="com.excel.core.bean.Excel" useGeneratedKeys="true">
+        INSERT INTO excel(json)VALUES (#{json})
+    </insert>
+</mapper>

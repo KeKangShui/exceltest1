@@ -147,7 +147,7 @@ public class TestController {
   */
         String stest = ExcelUtils.responseExcel(file);
 //        System.out.println(stest);
-//        modelMap.addAttribute("test",stest);
+//        modelMap.addAttribute("test",stest); //这个与下面的作用是一样的
         request.setAttribute("test",stest);
 
         //在这里转换为json格式存到数据库
