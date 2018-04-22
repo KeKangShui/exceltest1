@@ -36,12 +36,6 @@ public class TestController {
     @Autowired
     private ExcelService jsonService;
 
-   /* @RequestMapping(value = "/")
-    @ResponseBody
-    public String index(){
-        return "hello world";
-    }*/
-
     @RequestMapping("/test.do")
     public String test(User user, ModelMap map) {
 //        this.user =user;
@@ -53,7 +47,6 @@ public class TestController {
         map.addAttribute("sex", user.getSex());
         service.addUser(user);
         JSONObject ob = JSONObject.fromObject(user);
-
 //        service.addUser(ob);
         System.out.println(ob);
         return "test";
@@ -126,11 +119,6 @@ public class TestController {
 
     }
 
-
-
-
-
-
     @RequestMapping(value = "/mytest.do",method = RequestMethod.POST)
     public String test(HttpServletRequest request,HttpServletResponse response,@RequestParam MultipartFile file,ModelMap modelMap) throws ServletException, IOException {
 
@@ -150,8 +138,20 @@ public class TestController {
 //        modelMap.addAttribute("test",stest); //这个与下面的作用是一样的
         request.setAttribute("test",stest);
 
-        //在这里转换为json格式存到数据库
-        jsonService.addJson(stest);
+        //在这里转换为json格式存到数据库,而这个仅仅是存储一条数据
+//        jsonService.addJson(stest);
+        List<Json> list = new ArrayList<Json>();
+        String[] split = stest.split("<tr>|</tr>");
+        for (int i = 0; i < split.length; i++) {
+            System.out.println(split[i]);
+            list.add(new Json(i,split[i]));
+
+        }
+
+        for (int i = 0; i < list.size(); i++) {
+            JSONObject object = JSONObject.fromObject(list.get(i));
+            jsonService.addJson(object.toString());
+        }
 
 //        request.getRequestDispatcher("WEB-INF/page/show.jsp").forward(request,response);
         return "show";

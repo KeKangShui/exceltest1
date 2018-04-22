@@ -4,6 +4,11 @@ public class Json {
     private int id;
     private String json;
 
+    public Json(int id, String json) {
+        this.id = id;
+        this.json = json;
+    }
+
     public int getId() {
         return id;
     }
