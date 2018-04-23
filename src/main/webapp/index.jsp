@@ -16,6 +16,7 @@
 </div>
 
 
+<%--
 <div>
     <button name="importBtn" class="btn btn-primary addExcelBtn" type="button">
         <i class="fa fa-file-excel-o"></i> 批量导入
@@ -26,6 +27,7 @@
     </form>
 
 </div>
+--%>
 
 <script type="text/javascript">
     $(".addExcelBtn").unbind('click');
