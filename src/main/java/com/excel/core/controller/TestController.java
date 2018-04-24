@@ -144,13 +144,13 @@ public class TestController {
         String[] split = stest.split("<tr>|</tr>");
         for (int i = 0; i < split.length; i++) {
             System.out.println(split[i]);
-            list.add(new Json(i,split[i]));
+            list.add(new Json(split[i]));
 
         }
 
         for (int i = 0; i < list.size(); i++) {
             JSONObject object = JSONObject.fromObject(list.get(i));
-            jsonService.addJson(object.toString());
+            jsonService.addJson(i,object.toString());
         }
 
 //        request.getRequestDispatcher("WEB-INF/page/show.jsp").forward(request,response);

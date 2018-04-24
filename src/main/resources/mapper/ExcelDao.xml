@@ -3,9 +3,14 @@
 <mapper namespace="com.excel.core.dao.ExcelDao">
     <resultMap id="excel" type="com.excel.core.bean.Excel">
         <result property="id" column="id" javaType="int" jdbcType="INTEGER"/>
+        <result property="excel_id" column="excel_id" javaType="int" jdbcType="INTEGER"/>
         <result property="json" column="json" javaType="string" jdbcType="VARCHAR"/>
     </resultMap>
     <insert id="addJson" parameterType="com.excel.core.bean.Excel" useGeneratedKeys="true">
-        INSERT INTO excel(json)VALUES (#{json})
+        INSERT INTO excel(excel_id,json)VALUES (#{excel_id},#{json})
     </insert>
+
+       <select id="selectJsonById" parameterType="com.excel.core.bean.Excel" resultMap="excel">
+         SELECT * FROM excel
+       </select>
 </mapper>

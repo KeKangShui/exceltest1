@@ -1,7 +1,10 @@
 package ecel;
 
+import com.excel.core.bean.Excel;
 import com.excel.core.bean.Json;
+import com.excel.core.bean.User;
 import com.excel.core.service.ExcelService;
+import net.sf.json.JSON;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.junit.Test;
@@ -20,7 +23,6 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:applicationContext.xml")
 public class TestExcel {
-
     //需求：将Json 对象 以存储数据库中，以Json格式
     //首先要注入操作service类
     @Autowired
@@ -52,20 +54,43 @@ public class TestExcel {
         String[] split = table.split("<tr>|</tr>");
         for (int i = 0; i < split.length; i++) {
             System.out.println(split[i]);
-            list.add(new Json(i,split[i]));
+            list.add(new Json(split[i]));
 
         }
 
-        for (int i = 0; i < 10; i++) {
-        }
         JSONObject object = null;
         for (int i = 0; i < list.size(); i++) {
             object = JSONObject.fromObject(list.get(i));
             System.out.println(object);
-            excelService.addJson(object.toString());
+            excelService.addJson(i,object.toString());
         }
         System.out.println("-----------------------");
         JSONArray array = JSONArray.fromObject(list);
         System.out.println(array);
+    }
+
+
+    //需求点：实现从数据库中读取json格式并返回到前端页面
+   @Test
+    public void selectJson(){
+        //从数据库读取内容就需要涉及数据层的操作
+//      String s= excelService.selectJsonById();
+       JSONArray jsonobject = JSONArray.fromObject(excelService.selectJsonById());
+       String s = null;
+       for (int i = 0; i < jsonobject.size(); i++) {
+           JSONObject json = JSONObject.fromObject(jsonobject.get(i));
+           s =json.get("json").toString();
+          s = s.replace("{\"json\":\"","");
+           s =s.replace("\"}","");
+           s = s.replace("\\","");
+           System.out.println(s);
+       }
+
+       List<Excel> excel= (List<Excel>)JSONArray.toCollection(jsonobject,Excel.class);
+       for (int i = 0; i < excel.size(); i++) {
+           JSONObject jsonObject = JSONObject.fromObject(excel.get(i));
+
+//           System.out.println(jsonObject.get("json"));
+       }
     }
 }
