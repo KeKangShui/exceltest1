@@ -20,4 +20,10 @@ public class ExcelServiceImpl implements ExcelService{
      public List<Excel> selectJsonById() {
         return excelDao.selectJsonById();
     }
+
+    public List<Excel> selectById() {
+        return excelDao.selectById();
+    }
+
+
 }

@@ -1,0 +1,11 @@
+
+table{
+    width: 55%;
+    margin: 0px auto;
+    margin-top: 40px;
+}
+td{
+    width: 60px;
+    height: 40px;
+    text-align: center;
+}

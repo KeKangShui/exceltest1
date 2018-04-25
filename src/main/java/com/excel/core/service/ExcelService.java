@@ -16,4 +16,9 @@ public interface ExcelService {
      * @return
      */
     List<Excel> selectJsonById();
+
+    /**
+     * 查询i的列表
+     */
+    List<Excel> selectById();
 }

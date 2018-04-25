@@ -12,10 +12,17 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.excel.core.controller.TestController.jsonToText;
 
 /**
  * Created by ASUS on 2018/4/15.
@@ -29,8 +36,8 @@ public class TestExcel {
     private ExcelService excelService;
 
     //先写一个测试类的方法
-    @Test
-    public void insertJson(){
+    /* @Test
+   public void insertJson(){
         //创建多个存储对象
         List<Json> list =new ArrayList<Json>();
 
@@ -51,12 +58,16 @@ public class TestExcel {
                 "\n" +
                 "\n" +
                 "</td></tr></table>";
+
+        *//*首先将其切割成一段段，弄一个列表把每段存起来，将每一段转化为json格式存到数据库*//*
         String[] split = table.split("<tr>|</tr>");
-        for (int i = 0; i < split.length; i++) {
+        *//*for (int i = 0; i < split.length; i++) {
             System.out.println(split[i]);
             list.add(new Json(split[i]));
 
-        }
+        }*//*
+
+        list.add(new Json(table));
 
         JSONObject object = null;
         for (int i = 0; i < list.size(); i++) {
@@ -67,24 +78,30 @@ public class TestExcel {
         System.out.println("-----------------------");
         JSONArray array = JSONArray.fromObject(list);
         System.out.println(array);
-    }
-
+    }*/
+    /*public static String jsonToText(JSONObject s){
+        String text=s.get("json").toString();
+        text = text.replace("{\"json\":\"","");
+        text =text.replace("\"}","");
+        text = text.replace("\\","");
+        text = text.replace("nnnn","");
+        return text;
+    }*/
 
     //需求点：实现从数据库中读取json格式并返回到前端页面
-   @Test
-    public void selectJson(){
+    /*@Test
+   public void selectJson(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //从数据库读取内容就需要涉及数据层的操作
 //      String s= excelService.selectJsonById();
        JSONArray jsonobject = JSONArray.fromObject(excelService.selectJsonById());
        String s = null;
        for (int i = 0; i < jsonobject.size(); i++) {
            JSONObject json = JSONObject.fromObject(jsonobject.get(i));
-           s =json.get("json").toString();
-          s = s.replace("{\"json\":\"","");
-           s =s.replace("\"}","");
-           s = s.replace("\\","");
+           s = jsonToText(json);
            System.out.println(s);
        }
+        request.setAttribute("table",s);
+       request.getRequestDispatcher("WEB-INF/page/test.jsp").forward(request,response);
 
        List<Excel> excel= (List<Excel>)JSONArray.toCollection(jsonobject,Excel.class);
        for (int i = 0; i < excel.size(); i++) {
@@ -92,5 +109,5 @@ public class TestExcel {
 
 //           System.out.println(jsonObject.get("json"));
        }
-    }
+    }*/
 }

@@ -13,4 +13,7 @@
        <select id="selectJsonById" parameterType="com.excel.core.bean.Excel" resultMap="excel">
          SELECT * FROM excel
        </select>
+    <select id="selectById" parameterType="com.excel.core.bean.Excel" resultMap="excel">
+        SELECT excel_id FROM excel
+    </select>
 </mapper>

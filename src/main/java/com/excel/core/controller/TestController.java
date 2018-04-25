@@ -21,10 +21,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by ASUS on 2018/4/15.
@@ -125,15 +122,12 @@ public class TestController {
         System.out.println("您已进入该方法！！！");
         String filename = file.getOriginalFilename().toString();
         System.out.println(filename);
-  /*      Map<String,String> map = new HashMap<String, String>();
-        map.put("A","what");
-        map.put("B","the");
-        map.put("C","fuck");
-        modelMap.addAttribute("filename",filename);
-        modelMap.addAttribute("map",map);
-        request.getRequestDispatcher("WEB-INF/page/pic.jsp").forward(request,response);
-  */
+        /**
+         * 在这里判断一下，若数据库中没有与这个文件名相同的表，就让一个数加1，让列表把这个表单添加进list
+         */
+
         String stest = ExcelUtils.responseExcel(file);
+
 //        System.out.println(stest);
 //        modelMap.addAttribute("test",stest); //这个与下面的作用是一样的
         request.setAttribute("test",stest);
@@ -142,11 +136,12 @@ public class TestController {
 //        jsonService.addJson(stest);
         List<Json> list = new ArrayList<Json>();
         String[] split = stest.split("<tr>|</tr>");
-        for (int i = 0; i < split.length; i++) {
+        /*for (int i = 0; i < split.length; i++) {
             System.out.println(split[i]);
             list.add(new Json(split[i]));
-
-        }
+        }*/
+        //      添加多个表单
+        list.add(new Json(stest));
 
         for (int i = 0; i < list.size(); i++) {
             JSONObject object = JSONObject.fromObject(list.get(i));
@@ -155,6 +150,39 @@ public class TestController {
 
 //        request.getRequestDispatcher("WEB-INF/page/show.jsp").forward(request,response);
         return "show";
+        //从这里可以设置返回在另一个页面去，用service 获取全部列表（先测试返回excel_id,再加一个url
+        // 实现ajax动态请求）
+    }
+
+    /**
+     * 查询的方法
+     */
+    @RequestMapping(value = "/selectJson.do")
+    public String selectSheetJson(HttpServletRequest request,HttpServletResponse response){
+        String s[] = null;
+        List<String> strings =new ArrayList<String>();
+        //从数据库中读取内容
+        List<Excel> collection =jsonService.selectJsonById();
+//        List<Excel> collection =jsonService.selectById();
+
+        for (int i = 0; i < collection.size(); i++) {
+            System.out.println(collection.get(i));
+            JSONObject object = JSONObject.fromObject(collection.get(i));
+            System.out.println(object);
+            System.out.println("------------");
+            strings.add(jsonToText(object));
+            System.out.println(strings.get(i));
+        }
+        request.setAttribute("table",strings);
+        return "test";
+    }
+    public static String jsonToText(JSONObject s){
+        String text=s.get("json").toString();
+        text = text.replace("{\"json\":\"","");
+        text =text.replace("\"}","");
+        text = text.replace("\\","");
+        text = text.replace("nnnn","");
+        return text;
     }
 
 }

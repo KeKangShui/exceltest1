@@ -17,4 +17,9 @@ public interface ExcelDao {
      */
 //     @Select("select json from excel where excel_id >`1`")
     List<Excel> selectJsonById();
+
+    /**
+     * 查询id列表
+     */
+    List<Excel> selectById();
 }
