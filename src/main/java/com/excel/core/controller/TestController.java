@@ -51,7 +51,7 @@ public class TestController {
 
     @RequestMapping(value = "/upload.do", method = RequestMethod.POST)
     @ResponseBody
-    public StringBuffer testExcel(Excel excel, @RequestParam MultipartFile file, HttpServletResponse response, HttpServletRequest request
+    public String testExcel(Excel excel, @RequestParam MultipartFile file, HttpServletResponse response, HttpServletRequest request
     , ModelMap modelMap) throws IOException, ServletException {
         response.setCharacterEncoding("UTF-8");
         List<String[]> res = ExcelUtils.readExcel(file);
@@ -108,9 +108,9 @@ public class TestController {
 //        modelMap.addAttribute("str",list);
 //        request.setAttribute("list", str);
         request.setAttribute("res",res);
-        request.getRequestDispatcher("/WEB-INF/page/show.jsp").forward(request,response);
+//        request.getRequestDispatcher("/WEB-INF/page/show.jsp").forward(request,response);
 
-        return buffer;
+        return "show";
         //这种只是将数据直接返回到网页前端
 //        return json;
 

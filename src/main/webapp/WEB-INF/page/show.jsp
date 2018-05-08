@@ -44,6 +44,8 @@ for (int i = 0; i < str.size(); i++) {
     ${tx}
 </c:forEach>--%>
 ${requestScope.test}
+------------------------
+<%=request.getAttribute("test")%>
 <%--${test}  这个也是可以使用--%>
 </body>
 </html>

@@ -38,6 +38,8 @@
     <org.mybatis-version>3.2.7</org.mybatis-version>
     <junit-version>4.8.2</junit-version>
     <c3p0-version>0.9.1.2</c3p0-version>
+
+
   </properties>
 
   <dependencies>
@@ -127,7 +129,8 @@
       <version>2.3.9</version>
       <scope>compile</scope>
     </dependency>
-    <dependency>
+    <!--mybatis 配置-->
+   <dependency>
       <groupId>org.mybatis</groupId>
       <artifactId>mybatis</artifactId>
       <version>3.2.7</version>
@@ -139,6 +142,19 @@
       <version>1.2.2</version>
       <scope>compile</scope>
     </dependency>
+    <!--mybatis plus 配置-->
+    <dependency>
+      <groupId>org.apache.velocity</groupId>
+      <artifactId>velocity</artifactId>
+      <version>1.7</version>
+    </dependency>
+    <dependency>
+      <groupId>com.baomidou</groupId>
+      <artifactId>mybatis-plus</artifactId>
+      <version>2.0.1</version>
+    </dependency>
+
+
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
@@ -353,6 +369,31 @@
         <plugin>
           <artifactId>maven-deploy-plugin</artifactId>
           <version>2.8.2</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.eclipse.jetty</groupId>
+          <artifactId>jetty-maven-plugin</artifactId>
+          <version>9.4.9.v20180320</version>
+          <!--<groupId>org.mortbay.jetty</groupId>-->
+          <!--<artifactId>maven-jetty-plugin</artifactId>-->
+          <!--<version>6.1.10</version>-->
+          <configuration>
+            <!-- http://www.eclipse.org/jetty/documentation/current/jetty-maven-plugin.html -->
+            <scanIntervalSeconds>0</scanIntervalSeconds>
+            <!--  By Default, jetty start on port 8080 -->
+            <httpConnector>
+              <port>9092</port>
+            </httpConnector>
+            <systemProperties>
+              <force>true</force>
+              <systemProperty>
+                <name>catalina.home</name>
+                <value>${project.build.directory}/logs/</value>
+              </systemProperty>
+            </systemProperties>
+          </configuration>
+
         </plugin>
       </plugins>
     </pluginManagement>
